@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="register-container d-flex">
+
+    <div class="sidebar-left">
+        <div class="sidebar-item">
+            <h3>💪 Fitness Tip</h3>
+            <p>"Stay consistent and track your progress for better results!"</p>
+        </div>
+        <div class="sidebar-item">
+            <h3>🥗 Nutrition Advice</h3>
+            <p>"Eat balanced meals with plenty of protein and healthy fats."</p>
+        </div>
+        <div class="sidebar-item">
+            <h3>🧠 Mindset Tip</h3>
+            <p>"A positive mindset is key to achieving your fitness goals."</p>
+        </div>
+        <div class="sidebar-item fun-facts">
+            <h3>🧩 Fun Fact!</h3>
+            <p>
+                Did you know? Walking just 30 minutes a day can boost your mood, improve heart health, 
+                and help you burn calories effectively. Small steps lead to big results!
+            </p>
+            <p>
+                The plank exercise engages over 20 different muscles in your body — it's one of the most 
+                efficient full-body workouts!
+            </p>
+            <p>
+                Hydration is crucial! Drinking a glass of water before meals can reduce calorie intake 
+                and improve digestion.
+            </p>
+        </div>
+    </div>
+
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+    
+
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}  
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block greeting %}Edit Profile{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm bg-secondary text-light">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a href="{% url 'profile_detail' profile.slug %}" class="btn btn-outline-light">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

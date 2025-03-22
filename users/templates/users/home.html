@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Hero Section with Carousel -->
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</div>
+
+<!-- Key Features Section -->
+<section class="container py-5">
+    <h2 class="text-center mb-4">Our Key Features</h2>
+    <div class="row text-center">
+        <div class="col-md-4">
+            <i class="bi bi-basket2-fill display-4 text-primary"></i>
+            <h3>Marketplace</h3>
+            <p>Shop equipment, supplements, and accessories designed for your fitness journey.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-fire display-4 text-danger"></i>
+            <h3>Workouts</h3>
+            <p>Access workout programs tailored to your goals — from weight loss to muscle gain.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-trophy-fill display-4 text-warning"></i>
+            <h3>Achievements</h3>
+            <p>Track your progress and unlock achievements as you grow stronger each day.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Subscription Banner -->
+<section class="subscription-banner bg-primary text-center text-white py-5">
+    <h2>Get Exclusive Access to Premium Workouts!</h2>
+    <p>Unlock pro-level content, expert tips, and advanced workout plans.</p>
+    <a href="{% url 'register' %}" class="btn btn-light btn-lg">Subscribe Now</a>
+</section>
+
+
+<!-- Testimonials Section -->
+<section class="container py-5">
+    <h2 class="text-center mb-4">What Our Users Say</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <p>"The best fitness platform I've ever used! My progress is incredible!"</p>
+                    <p class="text-end"><strong>- Zhansaya</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <p>"I love the workout plans! They’re effective and easy to follow."</p>
+                    <p class="text-end"><strong>- Nikita</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <p>"The marketplace is packed with great deals on fitness gear!"</p>
+                    <p class="text-end"><strong>- Shyngys</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

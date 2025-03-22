@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ profile.user.username }}'s Profile{% endblock %}
+
+{% block greeting %}Profile of {{ profile.user.username }}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm bg-secondary text-light">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="Avatar" class="img-fluid rounded-circle mb-3" width="150">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Default Avatar" class="img-fluid rounded-circle mb-3">
+                {% endif %}
+            </div>
+
+            <div class="col-md-8">
+                <p><strong>Email:</strong> {{ profile.user.email }}</p>
+                <p><strong>Goal:</strong> {{ profile.goal|default:"Not specified" }}</p>
+                <p><strong>Weight:</strong> {{ profile.weight|default:"N/A" }} kg</p>
+                <p><strong>Height:</strong> {{ profile.height|default:"N/A" }} cm</p>
+                <p><strong>Age:</strong> {{ profile.age|default:"N/A" }}</p>
+                <p><strong>BMI:</strong> {{ profile.bmi|default:"N/A" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer text-center">
+        <a href="{% url 'profile_edit' profile.slug %}" class="btn btn-outline-primary">Edit Profile</a>
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}
