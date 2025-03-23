@@ -1,10 +1,41 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 
 <!-- Hero Section with Carousel -->
-<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-    
+<div id="heroCarousel" class="carousel slide custom-carousel" data-bs-ride="carousel">
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="carousel-image" style="background-image: url('{% static 'users/images/slide1.jpg' %}');">
+                <div class="carousel-caption">
+                    <h1>Welcome to FitFit</h1>
+                    <p>Your fitness journey starts here!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="carousel-image" style="background-image: url('{% static 'users/images/slide2.jpg' %}');">
+                <div class="carousel-caption">
+                    <h1>Build Strength</h1>
+                    <p>Achieve your goals with our expert trainers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="carousel-image" style="background-image: url('{% static 'users/images/slide3.jpg' %}');">
+                <div class="carousel-caption">
+                    <h1>Stay Motivated</h1>
+                    <p>Push your limits and go beyond!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     </button>
@@ -12,6 +43,7 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
     </button>
 </div>
+
 
 <!-- Key Features Section -->
 <section class="container py-5">
@@ -51,7 +83,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <p>"The best fitness platform I've ever used! My progress is incredible!"</p>
-                    <p class="text-end"><strong>- Zhansaya</strong></p>
+                    <p class="text-end"><strong>- Azan Orunbek</strong></p>
                 </div>
             </div>
         </div>
@@ -59,7 +91,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <p>"I love the workout plans! They’re effective and easy to follow."</p>
-                    <p class="text-end"><strong>- Nikita</strong></p>
+                    <p class="text-end"><strong>- Aibolat Urzhin</strong></p>
                 </div>
             </div>
         </div>
@@ -67,7 +99,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <p>"The marketplace is packed with great deals on fitness gear!"</p>
-                    <p class="text-end"><strong>- Shyngys</strong></p>
+                    <p class="text-end"><strong>- Nurgissa Zhetkizgen</strong></p>
                 </div>
             </div>
         </div>
