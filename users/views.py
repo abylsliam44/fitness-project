@@ -11,7 +11,7 @@ from .forms import RegisterForm, LoginForm, ProfileForm
 class HomeView(View):
     def get(self, request):
         context = {
-            "message": "Welcome to FitFit - Your Fitness Journey Starts Here!",
+            "message": "Push Limits. Achieve Goals. Stay Fit!",
         }
         return render(request, 'users/home.html', context)
 

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.env
+
+# Django
+/db.sqlite3
+/media/
+staticfiles/
+*.bak
+
+# Virtual Environment
+venv/
+.env
+*.egg-info/
+Pipfile
+Pipfile.lock
