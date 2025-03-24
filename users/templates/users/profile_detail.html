@@ -29,6 +29,10 @@
                 <p><strong>Height:</strong> {{ profile.height|default:"N/A" }} cm</p>
                 <p><strong>Age:</strong> {{ profile.age|default:"N/A" }}</p>
                 <p><strong>BMI:</strong> {{ profile.bmi|default:"N/A" }}</p>
+                <p><strong>Phone:</strong> {{ profile.phone }}</p>
+                <p><strong>City:</strong> {{ profile.city }}</p>
+                <p><strong>Gender:</strong> {{ profile.get_gender_display }}</p>
+                <p><strong>Age:</strong> {{ profile.age }}</p>
             </div>
         </div>
     </div>

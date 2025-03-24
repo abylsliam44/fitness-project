@@ -102,7 +102,15 @@ class Profile(models.Model):
         validators=[FileExtensionValidator(['jpg', 'png', 'jpeg'])]
     )
     slug = models.SlugField(unique=True, blank=True, null=True)
-
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    gender = models.CharField(
+        max_length=10,
+        choices=[('male', 'Male'), ('female', 'Female')],
+        null=True,
+        blank=True
+    )
+    
     def age(self):
         if self.birth_date:
             from datetime import date

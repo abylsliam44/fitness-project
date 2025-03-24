@@ -43,11 +43,14 @@ class LoginForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['birth_date', 'weight', 'height', 'goal', 'avatar']
+        fields = ['birth_date', 'weight', 'height', 'goal', 'avatar', 'phone', 'city', 'gender']
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'weight': forms.NumberInput(attrs={'class': 'form-control'}),
             'height': forms.NumberInput(attrs={'class': 'form-control'}),
             'goal': forms.TextInput(attrs={'class': 'form-control'}),
             'avatar': forms.FileInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+7 (XXX) XXX-XX-XX'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-control'}),
         }
