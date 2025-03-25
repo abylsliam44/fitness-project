@@ -1,20 +1,21 @@
 # Python
 __pycache__/
 *.py[cod]
-*.sqlite3
 *.log
-*.env
-
-# Django
-/db.sqlite3
-staticfiles/
-/media/
+*.sqlite3
 *.bak
-/fitness/settings.py
 
 # Virtual Environment
 venv/
-.env
 *.egg-info/
+.env
+
+# Pipenv
 Pipfile
 Pipfile.lock
+
+# Django
+db.sqlite3
+/media/
+staticfiles/
+/fitness/settings.py
