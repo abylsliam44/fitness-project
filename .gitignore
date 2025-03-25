@@ -7,8 +7,8 @@ __pycache__/
 
 # Django
 /db.sqlite3
-/media/
 staticfiles/
+/media/
 *.bak
 /fitness/settings.py
 
