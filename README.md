@@ -1,4 +1,4 @@
-# 🏋️ Fitness & Wellness Platform (Work in Progress)
+# 🏋️ Fitness Platform (Work in Progress)
 
 ⚠️ **This project is currently under active development.**  
 Core features are still being implemented and may change significantly.
