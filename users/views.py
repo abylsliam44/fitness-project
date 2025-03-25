@@ -7,6 +7,7 @@ from django.views.generic import DetailView, UpdateView
 from django.urls import reverse
 from .models import User, Profile
 from .forms import RegisterForm, LoginForm, ProfileForm
+from .utils import send_welcome_email
 
 class HomeView(View):
     def get(self, request):
@@ -23,7 +24,8 @@ class RegisterView(View):
     def post(self, request):
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            send_welcome_email(user)  
             messages.success(request, "Registration successful! Please log in.")
             return redirect('login')
         return render(request, 'users/register.html', {'form': form})
@@ -73,3 +75,4 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('profile_detail', kwargs={'slug': self.object.slug})
+

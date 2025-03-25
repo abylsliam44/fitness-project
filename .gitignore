@@ -10,6 +10,7 @@ __pycache__/
 /media/
 staticfiles/
 *.bak
+/fitness/settings.py
 
 # Virtual Environment
 venv/
