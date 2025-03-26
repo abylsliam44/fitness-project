@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Marketplace — FitFit{% endblock %}
+
+{% block greeting %}
+ Marketplace
+{% endblock %}
+
+{% block content %}
+<div class="text-end mb-3">
+    <a href="{% url 'create_product' %}" class="btn btn-success">+ Post New Listing</a>
+</div>
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm bg-light text-dark">
+            {% if product.images.first %}
+                <img src="{{ product.images.first.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <img src="{% static 'img/no-image.png' %}" class="card-img-top" style="height: 200px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p class="card-text fw-bold">{{ product.price }} ₸</p>
+                <span class="badge bg-secondary">{{ product.get_type_display }}</span>
+                <p class="card-text text-muted small">Posted by: {{ product.owner.username }}</p>
+
+                {% if product.owner == request.user %}
+                    <div class="d-flex justify-content-between mt-2">
+                        <a href="{% url 'edit_product' product.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a href="{% url 'delete_product' product.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center">No listings yet</p>
+    {% endfor %}
+</div>
+{% endblock %}

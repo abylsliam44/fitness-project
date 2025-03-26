@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Listing — FitFit{% endblock %}
+
+{% block greeting %}
+Edit Your Listing
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">Edit Listing</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
