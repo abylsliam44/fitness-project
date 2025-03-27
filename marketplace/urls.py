@@ -7,7 +7,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', ProductListView.as_view(), name='product_list'),
+    path('', ProductListView.as_view(), name='marketplace'),
     path('add/', ProductCreateView.as_view(), name='create_product'),
     path('edit/<int:pk>/', ProductUpdateView.as_view(), name='edit_product'),
     path('delete/<int:pk>/', ProductDeleteView.as_view(), name='delete_product'),

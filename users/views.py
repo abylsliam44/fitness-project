@@ -58,10 +58,6 @@ class LogoutView(View):
 class WorkoutsView(View):
     def get(self, request):
         return render(request, 'workouts_list.html')
-
-class MarketplaceView(View):
-    def get(self, request):
-        return render(request, 'marketplace.html')
     
 class ProfileDetailView(DetailView):
     model = Profile

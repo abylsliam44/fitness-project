@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from .models import Product, ProductImage, Category
 from .forms import ProductForm
 
-
 class ProductListView(ListView):
     model = Product
     template_name = 'marketplace/product_list.html'

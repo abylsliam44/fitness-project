@@ -33,8 +33,6 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
-
 # Custom User Model
 class User(AbstractUser):
     role = models.CharField(max_length=10, choices=USER_ROLES, default='user')
@@ -73,7 +71,6 @@ class User(AbstractUser):
         if self.email and '@' not in self.email:
             raise ValidationError("Please enter a valid email address.")
         
-        # Присвоение флагов в зависимости от роли
         if self.role == 'admin':
             self.is_staff = True
             self.is_superuser = True

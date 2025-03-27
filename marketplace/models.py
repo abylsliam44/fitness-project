@@ -4,7 +4,6 @@ from django.utils.text import slugify
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
-
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True, blank=True)
@@ -14,7 +13,13 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug and self.name:
-            self.slug = slugify(self.name)
+            base_slug = slugify(self.name)
+            slug = base_slug
+            counter = 1
+            while Category.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -46,7 +51,13 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug and self.title:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            while Product.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):
