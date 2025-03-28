@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -43,7 +43,7 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         product = self.get_object()
         return product.owner == self.request.user
-
+    
 
 class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
@@ -53,3 +53,11 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         product = self.get_object()
         return product.owner == self.request.user
+    
+    
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'marketplace/product_detail.html'
+    context_object_name = 'product'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'

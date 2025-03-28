@@ -4,11 +4,13 @@ from .views import (
     ProductCreateView,
     ProductUpdateView,
     ProductDeleteView,
+    ProductDetailView
 )
 
 urlpatterns = [
     path('', ProductListView.as_view(), name='marketplace'),
-    path('add/', ProductCreateView.as_view(), name='create_product'),
-    path('edit/<int:pk>/', ProductUpdateView.as_view(), name='edit_product'),
-    path('delete/<int:pk>/', ProductDeleteView.as_view(), name='delete_product'),
+    path('add/', ProductCreateView.as_view(), name='product_add'),
+    path('edit/<slug:slug>/', ProductUpdateView.as_view(), name='product_update'),
+    path('delete/<slug:slug>/', ProductDeleteView.as_view(), name='product_delete'),
+    path('<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),
 ]
