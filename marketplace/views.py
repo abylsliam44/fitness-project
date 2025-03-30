@@ -20,35 +20,41 @@ class ProductListView(ListView):
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
-    template_name = 'marketplace/create_product.html'
-    success_url = reverse_lazy('product_list')
+    template_name = 'marketplace/product_create.html'
+    success_url = reverse_lazy('marketplace')
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
         response = super().form_valid(form)
-
         images = self.request.FILES.getlist('images')
         for image in images:
             ProductImage.objects.create(product=self.object, image=image)
-
         return response
 
 
 class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductForm
-    template_name = 'marketplace/edit_product.html'
-    success_url = reverse_lazy('product_list')
+    template_name = 'marketplace/product_edit.html'
+    success_url = reverse_lazy('marketplace')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        images = self.request.FILES.getlist('images')
+        if images:
+            self.object.images.all().delete()
+            for image in images:
+                ProductImage.objects.create(product=self.object, image=image)
+        return response
 
     def test_func(self):
-        product = self.get_object()
-        return product.owner == self.request.user
+        return self.get_object().owner == self.request.user
     
 
 class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
-    template_name = 'marketplace/delete_product.html'
-    success_url = reverse_lazy('product_list')
+    template_name = 'marketplace/product_delete.html'
+    success_url = reverse_lazy('marketplace')
 
     def test_func(self):
         product = self.get_object()

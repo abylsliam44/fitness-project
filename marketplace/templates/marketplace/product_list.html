@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'marketplace/css/product_list.css' %}">
+{% endblock %}
+
+
 {% block title %}Marketplace — FitFit{% endblock %}
 
 {% block greeting %}
@@ -16,21 +21,23 @@ Marketplace
     {% for product in products %}
         <div class="col">
             <a href="{% url 'product_detail' product.slug %}" class="text-decoration-none text-reset">
-                <div class="card h-100 shadow-sm">
-                    {% if product.images.first %}
-                        <img src="{{ product.images.first.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;">
-                    {% else %}
-                        <img src="{% static 'img/no-image.png' %}" class="card-img-top" style="height: 180px; object-fit: cover;">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.title }}</h5>
-                        <p class="card-text">{{ product.price }} ₸</p>
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        {% if product.images.first %}
+                            <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="product-img">
+                        {% else %}
+                            <img src="{% static 'img/no-image.png' %}" alt="No image" class="product-img">
+                        {% endif %}
+                    </div>
+                    <div class="product-info">
+                        <h5 class="product-title">{{ product.title }}</h5>
+                        <p class="product-price">{{ product.price }} ₸</p>
                         <span class="badge bg-secondary">{{ product.get_type_display }}</span>
-                        <p class="text-muted small mb-0">By {{ product.owner.username }}</p>
+                        <p class="product-owner">By {{ product.owner.username }}</p>
                     </div>
                 </div>
             </a>
-        </div>
+        </div>    
     {% empty %}
         <p class="text-center">No listings yet</p>
     {% endfor %}

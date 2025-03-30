@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete {{ product.title }} — FitFit{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <h2 class="mb-4">Are you sure you want to delete <strong>{{ product.title }}</strong>?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger me-2">Yes, delete</button>
+        <a href="{% url 'product_detail' product.slug %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

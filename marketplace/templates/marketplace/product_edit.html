@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'marketplace/css/product_edit.css' %}">
+{% endblock %}
+
+
+{% block title %}Edit {{ product.title }} — FitFit{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white border-0">
+                {% if product.images.first %}
+                    <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="card-img-top img-fluid rounded">
+                {% else %}
+                    <img src="{% static 'img/no-image.png' %}" alt="No image" class="card-img-top img-fluid rounded">
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title">{{ product.title }}</h4>
+                    <p class="card-text text-muted mb-2">{{ product.price }} ₸</p>
+                    <p class="card-text">{{ product.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h2 class="mb-4">Edit Listing</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <label for="images" class="form-label mt-3">Replace Images:</label>
+                <input type="file" name="images" id="images" class="form-control" multiple>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{% url 'product_detail' product.slug %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
