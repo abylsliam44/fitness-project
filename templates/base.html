@@ -27,6 +27,7 @@
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'workouts_list' %}">Workouts</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'marketplace' %}">Marketplace</a></li>
                     {% if request.user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'favorites' %}">Favorites</a></li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'profile_detail' request.user.profile.slug %}">Profile</a>
                         </li>

@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="{% static 'marketplace/css/product_list.css' %}">
 {% endblock %}
 
-
 {% block title %}Marketplace — FitFit{% endblock %}
 
 {% block greeting %}
@@ -13,33 +12,104 @@ Marketplace
 {% endblock %}
 
 {% block content %}
-<div class="text-end mb-3">
-    <a href="{% url 'product_add' %}" class="btn btn-success">+ Post New Listing</a>
+<div class="d-flex justify-content-between align-items-center mb-4 filter-header">
+    <h2 class="mb-0">All Listings</h2>
+    <a href="{% url 'product_add' %}" class="btn btn-dark px-4 py-2 rounded-pill">+ Post New Listing</a>
 </div>
 
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+<div class="filter-box mb-5 mx-auto">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Search</label>
+            <input type="text" name="q" class="form-control" value="{{ q }}" placeholder="Enter keyword...">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Price from</label>
+            <input type="number" name="price_min" class="form-control" value="{{ request.GET.price_min }}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Price to</label>
+            <input type="number" name="price_max" class="form-control" value="{{ request.GET.price_max }}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Type</label>
+            <select name="type" class="form-select">
+                <option value="">All types</option>
+                <option value="product" {% if request.GET.type == 'product' %}selected{% endif %}>Product</option>
+                <option value="service" {% if request.GET.type == 'service' %}selected{% endif %}>Service</option>
+            </select>
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-dark rounded-pill">Filter</button>
+        </div>
+    </form>
+</div>
+
+{% if products %}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
     {% for product in products %}
-        <div class="col">
+    <div class="col">
+        <div class="product-card position-relative">
             <a href="{% url 'product_detail' product.slug %}" class="text-decoration-none text-reset">
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        {% if product.images.first %}
-                            <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="product-img">
-                        {% else %}
-                            <img src="{% static 'img/no-image.png' %}" alt="No image" class="product-img">
-                        {% endif %}
-                    </div>
-                    <div class="product-info">
-                        <h5 class="product-title">{{ product.title }}</h5>
-                        <p class="product-price">{{ product.price }} ₸</p>
-                        <span class="badge bg-secondary">{{ product.get_type_display }}</span>
-                        <p class="product-owner">By {{ product.owner.username }}</p>
-                    </div>
+                <div class="product-img-wrapper">
+                    {% if product.images.first %}
+                        <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="product-img">
+                    {% else %}
+                        <img src="{% static 'img/no-image.png' %}" alt="No image" class="product-img">
+                    {% endif %}
                 </div>
             </a>
-        </div>    
-    {% empty %}
-        <p class="text-center">No listings yet</p>
+
+            <div class="product-info">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="product-title mb-1">{{ product.title }}</h5>
+
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% if product.id in favorite_ids %}{% url 'remove_from_favorites' product.id %}{% else %}{% url 'add_to_favorites' product.id %}{% endif %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm border-0 p-0 bg-transparent">
+                                {% if product.id in favorite_ids %}
+                                    <span style="font-size: 18px; color: red;">♥</span>
+                                {% else %}
+                                    <span style="font-size: 18px; color: #aaa;">♡</span>
+                                {% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+
+                <p class="product-price">{{ product.price }} ₸</p>
+                <span class="badge bg-secondary">{{ product.get_type_display }}</span>
+                <span class="badge bg-light text-dark">{{ product.get_condition_display }}</span>
+                <span class="badge bg-dark">{{ product.get_status_display }}</span>
+                {% if product.expires_at %}
+                    <p class="text-muted mb-1 mt-1" style="font-size: 13px;">Expires: {{ product.expires_at }}</p>
+                {% endif %}
+                <p class="product-owner">By {{ product.owner.username }}</p>
+            </div>
+        </div>
+    </div>
     {% endfor %}
 </div>
+
+<div class="pagination mt-5">
+    {% for page_num in products.paginator.page_range %}
+        {% if products.number == page_num %}
+            <span class="page-link active">{{ page_num }}</span>
+        {% else %}
+            <a href="?{% if q %}q={{ q }}&{% endif %}
+                      {% if request.GET.price_min %}price_min={{ request.GET.price_min }}&{% endif %}
+                      {% if request.GET.price_max %}price_max={{ request.GET.price_max }}&{% endif %}
+                      {% if request.GET.type %}type={{ request.GET.type }}&{% endif %}
+                      page={{ page_num }}"
+               class="page-link">{{ page_num }}</a>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-results">
+    <p>No listings found.</p>
+</div>
+{% endif %}
 {% endblock %}

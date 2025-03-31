@@ -65,3 +65,7 @@
     border-radius: 4px;
     color: #ccc;
 }
+
+.product-description {
+    text-align: justify;
+}
