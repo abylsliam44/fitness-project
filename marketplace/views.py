@@ -1,14 +1,15 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
-from .models import Product, ProductImage, Category, Favorite
-from .forms import ProductForm
 from django.db.models import Q
 from django.utils import timezone
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, get_object_or_404
 from django.views import View
+from .models import Product, ProductImage, Category, Favorite, Comment
+from .forms import ProductForm, CommentForm, CommentReplyForm
+from django.template.loader import render_to_string
+from django.http import JsonResponse
+from django.template.response import TemplateResponse
 
 
 class ProductListView(ListView):
@@ -17,8 +18,7 @@ class ProductListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        today = timezone.now().date()
-        queryset = Product.objects.filter(is_active=True).exclude(expires_at__lt=today)
+        queryset = Product.objects.active()
         request = self.request
 
         q = request.GET.get('q')
@@ -85,7 +85,7 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         return self.get_object().owner == self.request.user
-    
+
 
 class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
@@ -95,8 +95,8 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         product = self.get_object()
         return product.owner == self.request.user
-    
-    
+
+
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'marketplace/product_detail.html'
@@ -104,30 +104,72 @@ class ProductDetailView(DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
+    def get_queryset(self):
+        return Product.objects.active()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.object
+        context['comments'] = product.comments.select_related('author').order_by('-created_at')
+        context['comment_form'] = CommentForm()
+        context['reply_forms'] = {
+            comment.id: CommentReplyForm(instance=comment)
+            for comment in product.comments.all()
+        }
+        if self.request.user.is_authenticated:
+            context['favorite_ids'] = Favorite.objects.filter(user=self.request.user).values_list('product_id', flat=True)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        product = self.object
+
+        if 'comment_submit' in request.POST:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.product = product
+                comment.author = request.user
+                comment.save()
+
+        elif 'reply_submit' in request.POST:
+            comment_id = request.POST.get('comment_id')
+            comment = get_object_or_404(Comment, id=comment_id, product=product)
+            if request.user == product.owner and not comment.reply:
+                form = CommentReplyForm(request.POST, instance=comment)
+                if form.is_valid():
+                    reply = form.save(commit=False)
+                    reply.replied_at = timezone.now()
+                    reply.save()
+
+        return redirect('product_detail', slug=product.slug)
+
 
 class AddToFavoritesView(LoginRequiredMixin, View):
     def post(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
         Favorite.objects.get_or_create(user=request.user, product=product)
         return redirect(request.META.get('HTTP_REFERER', 'marketplace'))
-    
+
 
 class RemoveFromFavoritesView(LoginRequiredMixin, View):
     def post(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
         Favorite.objects.filter(user=request.user, product=product).delete()
         return redirect(request.META.get('HTTP_REFERER', 'marketplace'))
-    
-    
+
+
 class FavoriteListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'marketplace/favorite_list.html'
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.objects.filter(favorited_by__user=self.request.user, is_active=True).order_by('-created_at')
+        return Product.objects.active().filter(favorited_by__user=self.request.user).order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['favorite_ids'] = Favorite.objects.filter(user=self.request.user).values_list('product_id', flat=True)
         return context
+    
+

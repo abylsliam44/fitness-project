@@ -69,3 +69,43 @@
 .product-description {
     text-align: justify;
 }
+
+.comment-block {
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: #1e1e1e; 
+    color: #e0e0e0; 
+}
+
+.comment-block .comment-author {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #90caf9; 
+}
+
+.comment-block .comment-content {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #f0f0f0; 
+}
+
+.comment-block .comment-meta {
+    font-size: 0.75rem;
+    color: #aaa; 
+}
+
+.comment-block .author-reply {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-left: 3px solid #4fc3f7;
+    background-color: #2c2c2c;
+    border-radius: 4px;
+}
+
+.comment-block .author-reply .reply-label {
+    font-weight: 600;
+    color: #4fc3f7;
+    margin-bottom: 0.25rem;
+}

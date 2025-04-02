@@ -26,6 +26,12 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class ProductManager(models.Manager):
+    def active(self):
+        today = timezone.now().date()
+        return self.filter(is_active=True).exclude(expires_at__lt=today)
 
 
 class Product(models.Model):
@@ -87,6 +93,8 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.title} by {self.owner.username}"
+    
+    objects = ProductManager()
 
 
 class ProductImage(models.Model):
@@ -108,4 +116,20 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ➝ {self.product.title}"
+    
+
+class Comment(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    reply = models.TextField(blank=True, null=True)
+    replied_at = models.DateTimeField(blank=True, null=True)
+
+    def is_author_reply(self):
+        return self.reply is not None
+
+    def __str__(self):
+        return f"Comment by {self.author.username} on {self.product.title}"
+
 
