@@ -110,6 +110,10 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.object
+
+        product.view_count += 1
+        product.save()
+
         context['comments'] = product.comments.select_related('author').order_by('-created_at')
         context['comment_form'] = CommentForm()
         context['reply_forms'] = {

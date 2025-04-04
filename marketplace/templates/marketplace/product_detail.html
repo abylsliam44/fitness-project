@@ -79,6 +79,10 @@
         <p class="mb-3"><span class="badge bg-secondary">{{ product.get_type_display }}</span></p>
         <p class="product-description" style="text-align: justify;">{{ product.description }}</p>
 
+        <p class="mb-3 product-views">
+            Views: <strong>{{ product.view_count }}</strong>
+        </p>        
+
         {% if user.is_authenticated %}
             <div class="mt-3">
                 {% if product.id in favorite_ids %}
