@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block title %}{{ product.title }} — FitFit{% endblock %}
-
 {% block greeting %}{{ product.title }}{% endblock %}
 
 {% block content %}
@@ -39,13 +38,11 @@
         <div id="commentsContainer">
             <div class="mt-5 text-start">
                 <h5 class="mb-3">Comments</h5>
-        
                 {% for comment in comments %}
                     <div class="comment-block">
                         <p class="comment-author">{{ comment.author.username }}</p>
                         <p class="comment-content">{{ comment.content }}</p>
                         <p class="comment-meta">{{ comment.created_at|date:"d M Y H:i" }}</p>
-        
                         {% if comment.reply %}
                             <div class="author-reply mt-3">
                                 <p class="reply-label">{{ product.owner.username }} (Author):</p>
@@ -57,7 +54,7 @@
                 {% empty %}
                     <p class="text-muted">No comments yet.</p>
                 {% endfor %}
-        
+
                 {% if user.is_authenticated %}
                 <form method="post" action="{% url 'product_detail' product.slug %}" class="comment-form mt-4" id="commentForm">
                     {% csrf_token %}
@@ -68,8 +65,7 @@
                     <p class="mt-3"><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
                 {% endif %}
             </div>
-        </div>        
-        
+        </div>
     </div>
 
     <div class="col-md-6">
@@ -78,10 +74,7 @@
         <p class="fs-4 fw-bold">{{ product.price }} ₸</p>
         <p class="mb-3"><span class="badge bg-secondary">{{ product.get_type_display }}</span></p>
         <p class="product-description" style="text-align: justify;">{{ product.description }}</p>
-
-        <p class="mb-3 product-views">
-            Views: <strong>{{ product.view_count }}</strong>
-        </p>        
+        <p class="mb-3 product-views">Views: <strong>{{ product.views.count }}</strong></p>
 
         {% if user.is_authenticated %}
             <div class="mt-3">
@@ -125,5 +118,3 @@
     </div>
 </div>
 {% endblock %}
-
-

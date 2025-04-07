@@ -5,10 +5,11 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 from django.utils import timezone
 from django.views import View
-from .models import Product, ProductImage, Category, Favorite, Comment
+from .models import Product, ProductImage, Category, Favorite, Comment, ProductView
 from .forms import ProductForm, CommentForm, CommentReplyForm
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from datetime import timedelta
 from django.template.response import TemplateResponse
 
 
@@ -75,12 +76,15 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     success_url = reverse_lazy('marketplace')
 
     def form_valid(self, form):
+        form.instance.owner = self.request.user
+        form.instance.latitude = self.request.POST.get('latitude')  
+        form.instance.longitude = self.request.POST.get('longitude')  
+
         response = super().form_valid(form)
         images = self.request.FILES.getlist('images')
-        if images:
-            self.object.images.all().delete()
-            for image in images:
-                ProductImage.objects.create(product=self.object, image=image)
+        for image in images:
+            ProductImage.objects.create(product=self.object, image=image)
+
         return response
 
     def test_func(self):
@@ -107,12 +111,40 @@ class ProductDetailView(DetailView):
     def get_queryset(self):
         return Product.objects.active()
 
+    def get_client_ip(self):
+        x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = self.request.META.get('REMOTE_ADDR')
+        return ip
+
+    def track_view(self, product):
+        user = self.request.user
+        ip = self.get_client_ip()
+        time_threshold = timezone.now() - timedelta(hours=6)
+
+        if user.is_authenticated:
+            has_viewed = ProductView.objects.filter(
+                product=product, user=user, viewed_at__gte=time_threshold
+            ).exists()
+        else:
+            has_viewed = ProductView.objects.filter(
+                product=product, ip_address=ip, viewed_at__gte=time_threshold
+            ).exists()
+
+        if not has_viewed:
+            ProductView.objects.create(
+                product=product,
+                user=user if user.is_authenticated else None,
+                ip_address=None if user.is_authenticated else ip
+            )
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.object
 
-        product.view_count += 1
-        product.save()
+        self.track_view(product)
 
         context['comments'] = product.comments.select_related('author').order_by('-created_at')
         context['comment_form'] = CommentForm()
