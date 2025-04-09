@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Workout History - FitFit{% endblock %}
+
+{% block content %}
+<h2>Your Workout History</h2>
+{% if history %}
+  {% for record in history %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ record.workout.title }}</h5>
+        <p class="card-text">{{ record.status }} - {{ record.completed_at }}</p>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>You have not completed any workouts yet.</p>
+{% endif %}
+{% endblock %}

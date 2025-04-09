@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Workouts - FitFit{% endblock %}
+
+{% block content %}
+<h2>Your Workouts</h2>
+{% if workouts %}
+  {% for workout in workouts %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ workout.title }}</h5>
+        <p class="card-text">{{ workout.description }}</p>
+        <a href="{% url 'workout_create' %}" class="btn btn-info">Create New Workout</a>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>You haven't created any workouts yet.</p>
+{% endif %}
+{% endblock %}

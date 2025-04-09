@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Workouts - FitFit{% endblock %}
+
+{% block content %}
+<h2>Available Workouts</h2>
+{% for workout in workouts %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ workout.title }}</h5>
+      <p class="card-text">{{ workout.description }}</p>
+      <a href="{% url 'sign_up_for_workout' workout.slug %}" class="btn btn-primary">Sign Up</a>
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}
