@@ -1,3 +1,5 @@
+{% load cache %}
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +29,10 @@
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'workouts_list' %}">Workouts</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'marketplace' %}">Marketplace</a></li>
                     {% if request.user.is_authenticated %}
+                        {% if request.user.role == 'trainer' %}
+                            <li class="nav-item"><a class="nav-link text-white" href="{% url 'trainer_dashboard' %}">Trainer Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" href="{% url 'workout_create' %}">Create Workout</a></li>
+                        {% endif %}
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'favorites' %}">Favorites</a></li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'profile_detail' request.user.profile.slug %}">Profile</a>
@@ -39,9 +45,11 @@
                 </ul>
             </nav>
         </div>
+        {% cache 600 "header_greeting" %}
         <div class="container my-3 text-center">
             <h1 class="display-4">{% block greeting %}{{ message }}{% endblock %}</h1>
         </div>
+        {% endcache %}
     </header>
 
     <!-- Main content area -->

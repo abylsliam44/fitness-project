@@ -8,7 +8,11 @@ from django.urls import reverse
 from .models import User, Profile
 from .forms import RegisterForm, LoginForm, ProfileForm
 from .utils import send_welcome_email
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
+
+@method_decorator(cache_page(60 * 10), name='get')
 class HomeView(View):
     def get(self, request):
         context = {

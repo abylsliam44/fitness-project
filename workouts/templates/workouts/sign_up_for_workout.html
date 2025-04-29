@@ -1,14 +1,28 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up - FitFit{% endblock %}
+{% block title %}Sign Up for {{ workout.title }} - FitFit{% endblock %}
 
 {% block content %}
-<h2>Sign Up for Workout</h2>
-<p><strong>Workout:</strong> {{ workout.title }}</p>
-<p>{{ workout.description }}</p>
+<div class="container mt-5">
+    <div class="card p-4">
+        <h2 class="mb-3">Sign Up for "{{ workout.title }}"</h2>
 
-<form method="POST">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-success">Sign Up</button>
-</form>
+        <p><strong>Trainer:</strong> {{ workout.trainer.get_full_name|default:workout.trainer.username }}</p>
+        <p><strong>Description:</strong> {{ workout.description }}</p>
+        <p><strong>Created At:</strong> {{ workout.created_at|date:"d.m.Y, H:i" }}</p>
+        <p><strong>Duration:</strong> {{ workout.duration }} minutes</p>
+
+        <h3>Leave a Review</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <button class="btn btn-success btn-lg px-4" type="submit">✅ Confirm Sign Up</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

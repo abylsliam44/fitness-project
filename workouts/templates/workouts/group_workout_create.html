@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Group Workout{% endblock %}
+
+{% block content %}
+<h2>Create Group Workout</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Create Group Workout</button>
+</form>
+
+{% endblock %}
