@@ -1,78 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Available Workouts - FitFit{% endblock %}
+{% block title %}{{ category.name }} Workouts{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'workouts/css/workout_list_by_category.css' %}">
+{% endblock %}
+
+{% block greeting %}{{ category.name }} Workouts{% endblock %}
 
 {% block content %}
-<h2>Available Workouts</h2>
-
-<!-- Фильтрация по категориям -->
-<div class="btn-group mb-3">
-    <button class="btn btn-secondary">All</button>
-    <button class="btn btn-secondary">Cardio</button>
-    <button class="btn btn-secondary">Strength</button>
-    <button class="btn btn-secondary">Flexibility</button>
-</div>
-
-{% for workout in workouts %}
-  <div class="card mb-3">
-    <!-- Изображение тренировки -->
-    {% if workout.image %}
-      <img src="{{ workout.image.url }}" class="card-img-top" alt="{{ workout.title }}">
-    {% endif %}
-    
-    <div class="card-body">
-      <h5 class="card-title">{{ workout.title }}</h5>
-      <p class="card-text">{{ workout.description }}</p>
-      <p><strong>Category:</strong> {{ workout.category }}</p>
-      <p><strong>Duration:</strong> {{ workout.duration }} minutes</p>
-      
-      <!-- Видео тренировки -->
-      {% if workout.video_url %}
-        <div class="mb-3">
-          <strong>Watch Training Video:</strong>
-          <iframe width="560" height="315" src="{{ workout.video_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-      {% endif %}
-
-      <!-- Кнопка записи на тренировку -->
-      {% if workout.slug %}
-        <a href="{% url 'sign_up_for_workout' workout.slug %}" class="btn btn-primary">Sign Up</a>
-      {% else %}
-        <p class="text-muted">This workout is not available for sign up yet.</p>
-      {% endif %}
-      
-      <!-- Отзывы для тренировки -->
-      <hr>
-      <h6>Reviews:</h6>
-      {% for review in workout.reviews.all %}
-        <div class="review">
-          <p><strong>{{ review.user.username }}:</strong> {{ review.text }}</p>
-          <p><strong>Rating:</strong> {{ review.rating }} stars</p>
-        </div>
-      {% empty %}
-        <p>No reviews yet.</p>
-      {% endfor %}
-      
-      <!-- Форма для добавления отзыва -->
-      {% if user.is_authenticated %}
-        <form method="post" action="{% url 'add_review' workout.slug %}">
-          {% csrf_token %}
-          <textarea name="text" class="form-control mb-2" placeholder="Leave your review..."></textarea>
-          <label for="rating">Rating:</label>
-          <select name="rating" class="form-control mb-2">
-            <option value="1">1 star</option>
-            <option value="2">2 stars</option>
-            <option value="3">3 stars</option>
-            <option value="4">4 stars</option>
-            <option value="5">5 stars</option>
-          </select>
-          <button type="submit" class="btn btn-success">Submit Review</button>
-        </form>
-      {% else %}
-        <p>Please <a href="{% url 'login' %}">login</a> to leave a review.</p>
-      {% endif %}
+<div class="workout-grid">
+    {% for workout in workouts %}
+    <div class="workout-card">
+        <h3>{{ workout.title }}</h3>
+        <p>{{ workout.description }}</p>
+        <p><strong>Trainer:</strong> {{ workout.trainer.first_name }}</p>
+        <a href="{% url 'workout_detail' workout.slug %}" class="btn btn-primary">View Details</a>
     </div>
-  </div>
-{% endfor %}
-
+    {% endfor %}
+</div>
 {% endblock %}

@@ -3,22 +3,22 @@
 {% block title %}Your Workout History{% endblock %}
 
 {% block content %}
-<h2>Your Workout History</h2>
+<div class="container mt-4">
+  <h2>Your Workout History</h2>
 
-{% if history %}
-    <ul>
-        {% for entry in history %}
-            <li>
-                <strong>{{ entry.workout.title }}</strong> - 
-                {{ entry.completed_at|date:"d.m.Y" }} - 
-                {{ entry.status }} - 
-                {% if entry.repetitions %} Reps: {{ entry.repetitions }} {% endif %}
-                {% if entry.weight %} Weight: {{ entry.weight }}kg {% endif %}
-            </li>
-        {% endfor %}
+  {% if history %}
+    <ul class="list-group mt-3">
+      {% for entry in history %}
+        <li class="list-group-item">
+          <strong>{{ entry.workout.title }}</strong><br>
+          {{ entry.completed_at|date:"d.m.Y" }} — {{ entry.status }}
+          {% if entry.repetitions %}<br>Reps: {{ entry.repetitions }}{% endif %}
+          {% if entry.weight %}<br>Weight: {{ entry.weight }} kg{% endif %}
+        </li>
+      {% endfor %}
     </ul>
-{% else %}
+  {% else %}
     <p>You haven't completed any workouts yet.</p>
-{% endif %}
-
+  {% endif %}
+</div>
 {% endblock %}

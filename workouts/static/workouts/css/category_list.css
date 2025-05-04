@@ -1,0 +1,42 @@
+.category-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.category-card {
+    background: linear-gradient(145deg, #1f1f1f, #1a1a1a);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+}
+
+.category-card h2 {
+    color: #20c997;
+    font-weight: 600;
+    font-size: 1.8rem;
+}
+
+.category-card a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    margin-top: 1rem;
+    display: inline-block;
+    border: 2px solid #20c997;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.category-card a:hover {
+    background-color: #20c997;
+    color: #000;
+}

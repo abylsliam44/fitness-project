@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Workout Categories{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'workouts/css/category_list.css' %}">
+{% endblock %}
+
+{% block greeting %}Choose Your Workout Category{% endblock %}
+
+{% block content %}
+<div class="category-section">
+    {% for category in categories %}
+    <div class="category-card">
+        <h2>{{ category.name }}</h2>
+        <a href="{% url 'workouts_by_category' category.slug %}">Explore Workouts</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

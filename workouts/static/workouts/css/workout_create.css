@@ -1,0 +1,58 @@
+.workout-create-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.workout-create-container h2 {
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.workout-create-container label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ccc;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.workout-create-container input,
+.workout-create-container select,
+.workout-create-container textarea {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 15px;
+}
+
+.workout-create-container input::placeholder,
+.workout-create-container textarea::placeholder {
+    color: #888;
+}
+
+.workout-create-container button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #17a589;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.workout-create-container button[type="submit"]:hover {
+    background-color: #1abc9c;
+}

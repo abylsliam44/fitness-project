@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ workout.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'workouts/css/workout_detail.css' %}">
+{% endblock %}
+
+{% block greeting %}{{ workout.title }}{% endblock %}
+
+{% block content %}
+<div class="workout-detail">
+    <h2>{{ workout.title }}</h2>
+    <p><strong>Description:</strong> {{ workout.description }}</p>
+    <p><strong>Trainer:</strong> {{ workout.trainer.get_full_name|default:workout.trainer.username }}</p>
+    <p><strong>Duration:</strong> {{ workout.duration }} minutes</p>
+    {% if workout.video_url %}
+    <iframe src="{{ workout.video_url }}" frameborder="0" allowfullscreen></iframe>
+    {% endif %}
+    <a href="{% url 'sign_up_for_workout' workout.slug %}" class="btn btn-primary">Sign Up</a>
+</div>
+{% endblock %}

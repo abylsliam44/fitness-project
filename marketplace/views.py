@@ -7,10 +7,8 @@ from django.utils import timezone
 from django.views import View
 from .models import Product, ProductImage, Category, Favorite, Comment, ProductView
 from .forms import ProductForm, CommentForm, CommentReplyForm
-from django.template.loader import render_to_string
-from django.http import JsonResponse
 from datetime import timedelta
-from django.template.response import TemplateResponse
+
 
 
 class ProductListView(ListView):
@@ -42,7 +40,10 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+
+        categories = Category.objects.all()
+
+        context['categories'] = categories
         context['q'] = self.request.GET.get('q', '')
         context['price_min'] = self.request.GET.get('price_min', '')
         context['price_max'] = self.request.GET.get('price_max', '')
@@ -52,6 +53,7 @@ class ProductListView(ListView):
             context['favorite_ids'] = Favorite.objects.filter(user=self.request.user).values_list('product_id', flat=True)
 
         return context
+
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):

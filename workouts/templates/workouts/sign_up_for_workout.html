@@ -1,28 +1,42 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up for {{ workout.title }} - FitFit{% endblock %}
+{% load static %}
+
+{% block title %}Sign Up for {{ workout.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'workouts/css/workout_detail.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card p-4">
-        <h2 class="mb-3">Sign Up for "{{ workout.title }}"</h2>
+<div class="workout-detail-container">
+  <div class="workout-detail-card">
+    <h2 class="workout-title">Sign Up for "{{ workout.title }}"</h2>
 
-        <p><strong>Trainer:</strong> {{ workout.trainer.get_full_name|default:workout.trainer.username }}</p>
-        <p><strong>Description:</strong> {{ workout.description }}</p>
-        <p><strong>Created At:</strong> {{ workout.created_at|date:"d.m.Y, H:i" }}</p>
-        <p><strong>Duration:</strong> {{ workout.duration }} minutes</p>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
 
-        <h3>Leave a Review</h3>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Submit Review</button>
-        </form>
+    <ul class="workout-info-list">
+      <li><strong>Trainer:</strong> {{ workout.trainer.get_full_name|default:workout.trainer.username }}</li>
+      <li><strong>Description:</strong> {{ workout.description }}</li>
+      <li><strong>Created:</strong> {{ workout.created_at|date:"d.m.Y, H:i" }}</li>
+      <li><strong>Duration:</strong> {{ workout.duration }} minutes</li>
+      <li><strong>Spots Left:</strong> {{ spots_left }}</li>
+    </ul>
 
-        <form method="post" class="mt-4">
-            {% csrf_token %}
-            <button class="btn btn-success btn-lg px-4" type="submit">✅ Confirm Sign Up</button>
-        </form>
-    </div>
+    {% if signed_up %}
+      <div class="alert alert-info">You are already signed up.</div>
+    {% elif spots_left > 0 %}
+      <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-success btn-lg w-100">✅ Confirm Sign Up</button>
+      </form>
+    {% else %}
+      <div class="alert alert-warning">Sorry, no spots left.</div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

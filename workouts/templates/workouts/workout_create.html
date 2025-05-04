@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Create Workout - FitFit{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'workouts/css/workout_create.css' %}">
+{% endblock %}
+
+{% block greeting %}Create Workout{% endblock %}
+
 {% block content %}
-<h2>Create Workout</h2>
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Create Workout</button>
-</form>
+<div class="workout-create-container">
+  <h2>Create Workout</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Workout</button>
+  </form>
+</div>
 {% endblock %}

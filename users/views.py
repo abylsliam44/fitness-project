@@ -5,20 +5,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views.generic import DetailView, UpdateView
 from django.urls import reverse
-from .models import User, Profile
+from .models import Profile
 from .forms import RegisterForm, LoginForm, ProfileForm
 from .utils import send_welcome_email
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 
 
-@method_decorator(cache_page(60 * 10), name='get')
 class HomeView(View):
     def get(self, request):
         context = {
             "message": "Push Limits. Achieve Goals. Stay Fit!",
         }
         return render(request, 'users/home.html', context)
+
 
 class RegisterView(View):
     def get(self, request):
@@ -29,10 +27,11 @@ class RegisterView(View):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            send_welcome_email(user)  
+            send_welcome_email(user)
             messages.success(request, "Registration successful! Please log in.")
             return redirect('login')
         return render(request, 'users/register.html', {'form': form})
+
 
 class LoginView(View):
     def get(self, request):
@@ -53,20 +52,19 @@ class LoginView(View):
                 messages.error(request, "Invalid email or password.")
         return render(request, 'users/login.html', {'form': form})
 
+
 class LogoutView(View):
     def get(self, request):
         logout(request)
         messages.success(request, "You have been logged out successfully.")
         return redirect('home')
 
-class WorkoutsView(View):
-    def get(self, request):
-        return render(request, 'workouts_list.html')
-    
+
 class ProfileDetailView(DetailView):
     model = Profile
     template_name = 'users/profile_detail.html'
     context_object_name = 'profile'
+
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
@@ -75,4 +73,3 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('profile_detail', kwargs={'slug': self.object.slug})
-

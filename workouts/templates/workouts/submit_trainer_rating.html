@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Rate Trainer - FitFit{% endblock %}
+{% block title %}Rate Trainer{% endblock %}
 
 {% block content %}
-<h2>Rate Trainer: {{ trainer.username }}</h2>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Submit Rating</button>
-</form>
-
+<div class="container mt-5">
+  <div class="card p-4">
+    <h2>Rate Trainer: {{ trainer.get_full_name|default:trainer.username }}</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Submit Rating</button>
+    </form>
+  </div>
+</div>
 {% endblock %}
